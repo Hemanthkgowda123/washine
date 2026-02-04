@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Valentine Adventure ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #ff477e;
+            --glass-white: rgba(255, 255, 255, 0.25);
+            --teddy-brown: #a67c52;
+            --teddy-dark: #8e653f;
+            --transition-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #ffafbd, #ffc3a0, #ee9ca7, #ffdde1);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            position: fixed;
+            top: 20px;
+            width: 85%;
+            max-width: 450px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            z-index: 100;
+            border: 2px solid rgba(255,255,255,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff477e, #ff8fa3, #ff477e);
+            background-size: 200% 100%;
+            animation: barFlow 2s linear infinite;
+            border-radius: 20px;
+            transition: width 0.8s var(--transition-bounce);
+        }
+
+        @keyframes barFlow { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+
+        /* --- GLASS CARD --- */
+        .glass-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 20;
+            width: 90%;
+            max-width: 420px;
+            position: relative;
+        }
+
+        .name-highlight {
+            color: #d63384;
+            font-weight: 700;
+            display: inline-block;
+            animation: nameWave 2s ease-in-out infinite;
+        }
+
+        @keyframes nameWave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* --- TEDDY --- */
+        .teddy-container {
+            position: relative;
+            width: 140px;
+            height: 130px;
+            margin: 0 auto 15px;
+            cursor: pointer;
+            transition: transform 0.3s var(--transition-bounce);
+        }
+        .teddy-container:hover { transform: scale(1.1); }
+        .jump { animation: jumpAnim 0.6s var(--transition-bounce); }
+        .giggle { animation: giggleAnim 0.3s linear infinite; }
+
+        @keyframes jumpAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px) rotate(10deg); } }
+        @keyframes giggleAnim { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
+
+        .teddy-head { background: var(--teddy-brown); width: 80px; height: 75px; border-radius: 50%; position: absolute; top: 10px; left: 30px; z-index: 5; }
+        .teddy-body { background: var(--teddy-dark); width: 95px; height: 80px; border-radius: 50% 50% 45% 45%; position: absolute; top: 55px; left: 22.5px; z-index: 4; }
+        .ear { background: var(--teddy-brown); width: 28px; height: 28px; border-radius: 50%; position: absolute; top: 5px; }
+        .ear-l { left: 22px; } .ear-r { right: 22px; }
+        .eye { width: 10px; height: 10px; background: #222; border-radius: 50%; position: absolute; top: 30px; }
+        .eye-l { left: 22px; } .eye-r { right: 22px; }
+
+        /* --- UI ELEMENTS --- */
+        .title { color: var(--primary-pink); font-size: 1.8rem; margin: 10px 0; line-height: 1.3; }
+        .content-text { color: #444; font-size: 1.1rem; line-height: 1.6; min-height: 100px; }
+
+        .btn-wrapper { min-height: 110px; display: flex; justify-content: center; align-items: center; gap: 15px; }
+
+        .yes-button, .next-button {
+            background: linear-gradient(45deg, var(--primary-pink), #ff7096);
+            color: white; border: none; padding: 18px 45px;
+            font-size: 1.1rem; font-weight: 700; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 10px 25px rgba(255, 71, 126, 0.4);
+            transition: all 0.3s var(--transition-bounce);
+        }
+
+        .no-button { background: rgba(255,255,255,0.3); color: #6c757d; border: 2px solid #6c757d; padding: 12px 30px; border-radius: 50px; cursor: pointer; transition: all 0.2s ease; }
+
+        /* --- PARTICLES --- */
+        .particle { position: absolute; pointer-events: none; z-index: 50; }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
+        .floater {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 30;
+            animation: drift 8s linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(-100vw, 20vh) rotate(0deg); }
+            100% { transform: translate(100vw, 80vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body onmousemove="createTrail(event)">
+
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div class="floater" id="gift" onclick="popGift()">🎁</div>
+
+    <div id="hearts-container"></div>
+
+    <div class="glass-card" id="card">
+        <div class="teddy-container" id="teddy-box" onclick="teddyAdventure()">
+            <div class="ear ear-l"></div><div class="ear ear-r"></div>
+            <div class="teddy-head"><div class="eye eye-l"></div><div class="eye eye-r"></div></div>
+            <div class="teddy-body"></div>
+        </div>
+
+        <h1 class="title" id="display-title">Will you be my Valentine, <span class="name-highlight">Chhandpriya</span>? ❤️</h1>
+        <div class="content-text" id="display-text">I have prepared a special 10-stage adventure just for you. Shall we begin the journey?</div>
+        
+        <div class="btn-wrapper" id="btn-container">
+            <button class="yes-button" id="yesBtn" onclick="handleInteraction()">Yes!</button>
+            <button class="no-button" id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStage = 0;
+        const totalStages = 10;
+        
+        const stages = [
+            { title: "Stage 1: The Adventure Begins! 🗺️", text: "Yay! Chhandpriya, I'm so happy you said yes. Let's explore the 9 other reasons why you're my favorite person.", button: "Next Stop" },
+            { title: "Stage 2: Your Radiant Smile 💎", text: "Your smile is the treasure at the end of every map. It lights up even the darkest days.", button: "Keep Exploring" },
+            { title: "Stage 3: The Kindest Heart 🌲", text: "You have a heart of gold. Your kindness to everyone around you is truly beautiful.", button: "Next Landmark" },
+            { title: "Stage 4: Pure Magic ✨", text: "Being with you feels like magic. You turn ordinary moments into extraordinary memories.", button: "Cast a Spell" },
+            { title: "Stage 5: My Safe Haven 🏰", text: "In this wild world, you are the place where I feel most at peace. You are my home.", button: "Continue" },
+            { title: "Stage 6: Aiming for the Stars ⭐", text: "I love your ambition and your dreams. I'll always be your #1 fan, cheering you on!", button: "Reach Higher" },
+            { title: "Stage 7: Every Little Detail 🔍", text: "I love the way you talk, the way you think, and all the tiny quirks that make you YOU.", button: "So Sweet" },
+            { title: "Stage 8: A Brave Promise ⚔️", text: "I promise to be your rock, your protector, and your partner through every high and low.", button: "Almost There" },
+            { title: "Stage 9: Our Infinite Horizon ♾️", text: "I can't wait for all the adventures we haven't even had yet. Our story is my favorite.", button: "The Grand Finale" },
+            { title: "Stage 10: My Whole World 🌍", text: "Chhandpriya, you are my soulmate and my best friend. Happy Valentine's Day! Forever yours.", button: "Let's Celebrate! 🥳" }
+        ];
+
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const progressBar = document.getElementById('progress-bar');
+        const titleEl = document.getElementById('display-title');
+        const textEl = document.getElementById('display-text');
+        const btnContainer = document.getElementById('btn-container');
+        const teddy = document.getElementById('teddy-box');
+
+        // Logic for mouse trail effect
+        function createTrail(e) {
+            const trail = document.createElement('div');
+            trail.className = 'particle';
+            trail.innerHTML = '✨';
+            trail.style.left = e.pageX + 'px';
+            trail.style.top = e.pageY + 'px';
+            trail.style.color = '#fff';
+            trail.style.fontSize = Math.random() * 10 + 5 + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => {
+                trail.style.transform = 'scale(0)';
+                trail.style.opacity = '0';
+                setTimeout(() => trail.remove(), 500);
+            }, 50);
+        }
+
+        // Teddy animations
+        function teddyAdventure() {
+            teddy.classList.add('giggle');
+            for(let i=0; i<5; i++) createHeartAt(teddy.offsetLeft + 70, teddy.offsetTop);
+            setTimeout(() => teddy.classList.remove('giggle'), 1000);
+        }
+
+        // Gift interaction
+        function popGift() {
+            const gift = document.getElementById('gift');
+            for(let i=0; i<20; i++) createHeartAt(gift.offsetLeft + 20, gift.offsetTop + 20);
+            gift.style.display = 'none';
+            setTimeout(() => { gift.style.display = 'block'; }, 5000);
+        }
+
+        // Elusive "No" button logic
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.position = "fixed";
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+            // Grow the Yes button slightly to encourage them!
+            yesBtn.style.transform = `scale(${1 + (currentStage*0.06)})`;
+        });
+
+        // Main stage transition logic
+        function handleInteraction() {
+            teddy.classList.add('jump');
+            setTimeout(() => teddy.classList.remove('jump'), 600);
+            
+            for(let i=0; i<15; i++) setTimeout(createHeart, i * 50);
+
+            if (currentStage < stages.length) {
+                const s = stages[currentStage];
+                currentStage++;
+                progressBar.style.width = (currentStage / totalStages) * 100 + "%";
+
+                titleEl.innerHTML = s.title;
+                textEl.innerText = s.text;
+                btnContainer.innerHTML = `<button class="next-button" onclick="handleInteraction()">${s.button}</button>`;
+            } else {
+                titleEl.innerText = "Success! 🏆";
+                textEl.innerText = "I love you endlessly, Chhandpriya! You've made me the luckiest person alive.";
+                btnContainer.innerHTML = "<button class='yes-button' onclick='location.reload()'>Restart Adventure? ❤️</button>";
+                setInterval(createHeart, 80);
+            }
+        }
+
+        // Heart generation
+        function createHeart() {
+            createHeartAt(Math.random() * window.innerWidth, window.innerHeight + 50);
+        }
+
+        function createHeartAt(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'particle';
+            heart.innerHTML = ['❤️', '💖', '💗', '✨', '🌸'][Math.floor(Math.random() * 5)];
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            heart.style.animation = `floatUp ${Math.random() * 2 + 2}s ease-out forwards`;
+            document.getElementById('hearts-container').appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        // Ambient background hearts
+        setInterval(createHeart, 800);
+    </script>
+</body>
+</html>
